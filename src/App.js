@@ -1,18 +1,57 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+const Select = ({ options=[], keyOfName, placeholderMessage, defaultValue="-1" }) => {
+  return (
+    <select required defaultValue={defaultValue}>
+      <option disabled value="-1">{placeholderMessage}</option>
+      {
+        options.map(function (option, index) {
+          return (
+            <option key={index} value={index}>
+              {option}
+            </option>
+          );
+        })
+      }
+    </select>
+  )
+}
+
+class Bug extends Component {
+  constructor(){
+    super();
+    this.state = {index: 0}
+    let self = this;
+    setTimeout(()=>{
+      console.log("before setState :" + this.state.index);
+      self.setState({index: 1});
+      console.log("after setState :" + this.state.index);
+    }, 2000);
+  }
+
+  render(){
+    return (
+      <Select
+        options={this.props.options}
+        defaultValue={this.props.options ? this.state.index : -1}
+        placeholderMessage="Seleccione una Cuenta"
+      />
+    )
+  }
+}
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state = {options: []};
+    let self = this;
+    setTimeout(()=>{self.setState({options: ["ji", "xo"]})}, 2000);
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <Bug options={this.state.options}/>
       </div>
     );
   }
